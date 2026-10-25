@@ -68,8 +68,10 @@ python -m pip check
 
 Tests cover future-data independence, price scaling, calendar alignment, log inversion, saved models, backtesting, and unavailable-source errors. The launcher supports the installed Gradio 5 and Gradio 6 styling APIs; see its [official migration guide](https://gradio.app/guides/gradio-6-migration-guide) for framework changes.
 
-Current lightweight check (Windows): **18 passed** in each existing environment above. Tests include CSV upload, training, forecast and model restore, offline operation without BeautifulSoup, escaped table content, and bounded previews. No dependency installs, model downloads, live publishing, or heavy datasets were used.
+Current lightweight check (Windows): **21 passed** in each existing environment above. Tests include CSV upload, training, forecast and model restore, offline operation without BeautifulSoup, escaped table content, and bounded previews. No dependency installs, model downloads, live publishing, or heavy datasets were used.
 
 Browser verification covered CSV import, all six tabs, table switching with retained data, and a 390-pixel layout. Default readable tables avoid the native grid's nested-control findings. Gradio 6 still reports accessibility findings in hidden tab scaffolding and empty plot placeholders; full screen-reader conformance is not claimed. Live market endpoints were not exercised.
 
 No license file is included.
+
+Product history cache writes use atomic replacement, preserving the previous file on write failure. Forced external refreshes retain their cached fallback when the source is unavailable.

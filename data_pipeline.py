@@ -9,6 +9,7 @@ import os
 import random
 import re
 import time
+import tempfile
 import unicodedata
 from datetime import datetime, timedelta
 from typing import Optional
@@ -700,11 +701,9 @@ class ExternalDataSource:
             logger.warning("unknown external feature key: %s", key)
             return None
 
-        cached = None
-        if not force_refresh:
-            cached = self._load_cache(key)
-            if cached is not None:
-                return cached
+        cached = self._load_cache(key)
+        if not force_refresh and cached is not None:
+            return cached
 
         # Fetch using the mapped symbol
         symbol = info.get("symbol")
@@ -764,12 +763,20 @@ class Cache:
             return pd.DataFrame(columns=["date", "price"])
 
     def save(self, pid, df: pd.DataFrame):
+        temporary = None
         try:
-            df.sort_values("date").drop_duplicates("date").to_csv(
-                self._path(pid), index=False
-            )
+            path = Path(self._path(pid))
+            with tempfile.NamedTemporaryFile(dir=path.parent, prefix=path.name + ".", suffix=".tmp", delete=False) as handle:
+                temporary = Path(handle.name)
+            df.sort_values("date").drop_duplicates("date").to_csv(temporary, index=False)
+            os.replace(temporary, path)
+            return True
         except Exception as exc:
             logger.warning("cache save failed for %s: %s", pid, exc)
+            return False
+        finally:
+            if temporary is not None:
+                temporary.unlink(missing_ok=True)
 
     def update(self, pid, force=False):
         """Incrementally fetch new data since last cache."""
