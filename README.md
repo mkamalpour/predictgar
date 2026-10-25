@@ -1,5 +1,7 @@
 # predictgar
 
+**[Explore the interactive project presentation](docs/overview.html)** — open locally in your browser; works offline.
+
 Explore Iranian livestock and feed price history, compare forecasting models, and export predictions. Import a CSV or fetch available source data, then check a walk-forward backtest before using a forecast.
 
 ## Try it first
