@@ -26,7 +26,7 @@ VS Code's local interpreter settings were aligned with the same assignment.
 
 ## Verification
 
-- **Automated tests:** 24 passed.
+- **Automated tests:** 29 passed; 0 reported skips; 0 private-report cases deselected.
 - **Startup check:** `run.cmd --check` passed from outside the repository;
   required startup modules were imported in the assigned environment.
 - **Tested runtime:** Windows; Conda cnn; Python 3.10.20.
@@ -49,7 +49,7 @@ python -m pytest tests -q -p no:cacheprovider
 ## Next three upgrades
 
 1. Forecast provenance panel.
-2. Naive-baseline comparisons in exports.
+2. Seasonal-baseline comparisons with representative historical prices.
 3. Source freshness and coverage indicators.
 
 Expected benefit: clearer decisions, more reproducible workflows and stronger evidence
@@ -58,3 +58,17 @@ for quality. These are proposed upgrades, not implemented features or measured s
 External assets: Dated representative price history is needed for meaningful backtests; live fetching was not exercised.
 
 No root license file is set. No license was selected or changed.
+
+## Additional implementation pass
+
+Backtest date/size/target guards, a last-training-price baseline, MAE skill, scored-window coverage and chronological split provenance, exposed in the chart and fold table.
+
+Use: Backtest → Run Backtest. Compare the baseline trace and inspect Naive MAE, MAE Skill, Coverage and split dates.
+
+Verification: the complete offline suite passed in the assigned **cnn**
+environment after this change (29 tests). Regression fixtures remain
+temporary/synthetic. Optional real-model/data quality and external integrations
+remain unverified. No packages, models or additional environments were installed.
+
+The earlier numeric scores are subjective historical assessments; new features do
+not automatically establish a higher score or production readiness.

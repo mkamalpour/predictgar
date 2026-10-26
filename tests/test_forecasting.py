@@ -186,6 +186,13 @@ def test_quick_forecast_and_walk_forward(monkeypatch):
     )
     assert len(folds) == 2
     assert folds.n_test.sum() == 20
+    assert (folds.coverage == 1).all()
+    for row in folds.itertuples():
+        assert pd.Timestamp(row.train_end) < pd.Timestamp(row.test_start)
+        last_price = frame.loc[frame.date == pd.Timestamp(row.train_end), 'price'].iloc[0]
+        heldout = frame.loc[frame.date.between(pd.Timestamp(row.test_start), pd.Timestamp(row.test_end)), 'price']
+        assert row.naive_mae == pytest.approx(np.mean(np.abs(heldout - last_price)))
+        assert row.mae_skill == pytest.approx(1 - row.mae / row.naive_mae)
 
 
 def test_gradio_upload_train_forecast_and_restore(tmp_path, monkeypatch):
@@ -234,6 +241,10 @@ def test_gradio_upload_train_forecast_and_restore(tmp_path, monkeypatch):
         frame, "fixture", 5, "Ridge", restored, 2, False, []
     )
     assert len(result[3]) == 5, result[0]
+    evaluation = callbacks['run_backtest_fn'](frame, 'fixture', 'Ridge', 10,
+        '1,7', '7,14', 'linear', 'D', True, False, 'Voting', True, [])
+    assert {'Naive Mae', 'Coverage'} <= set(evaluation[4].columns), evaluation[0]
+    assert any(trace.name == 'Last-training-price baseline MAE' for trace in evaluation[1].data)
     ui.close()
 
 

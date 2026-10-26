@@ -2243,7 +2243,8 @@ def create_app():
                 bt_errors = gr.Plot(label="Prediction Errors")
             bt_metrics = result_table(interactive=False, label="Summary Metrics")
             gr.Markdown(
-                "Estimated ranges are not calibrated guarantees. Compare forecast errors across historical folds."
+                "Estimated ranges are not calibrated guarantees. The naive baseline holds the last training price constant. "
+                "Positive MAE skill beats that baseline; negative is worse. Coverage shows how much of each held-out window was scored."
             )
             bt_details = result_table(
                 interactive=False, label="Backtest fold results", max_height=250
@@ -2373,6 +2374,10 @@ def create_app():
                                 showlegend=False,
                             )
                         )
+                    if 'naive_mae' in bt_df.columns:
+                        fig_compare.add_trace(go.Scatter(
+                            x=[f'Fold {int(f)}' for f in bt_df['fold']], y=bt_df['naive_mae'],
+                            mode='lines+markers', name='Last-training-price baseline MAE'))
                     fig_compare.update_layout(
                         title=f"Backtest MAE per Fold (Avg: {avg_mae:,.0f})",
                         template="plotly_white",
@@ -2423,7 +2428,8 @@ def create_app():
 
                     detail_cols = [
                         c
-                        for c in ["fold", "best_model", "mae", "rmse", "n_test"]
+                        for c in ["fold", "best_model", "mae", "rmse", "n_test", 'naive_mae',
+                                  'naive_rmse', 'mae_skill', 'coverage', 'train_end', 'test_start', 'test_end']
                         if c in bt_df.columns
                     ]
                     details = bt_df[detail_cols].round(2)

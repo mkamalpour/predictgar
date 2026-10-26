@@ -1926,6 +1926,9 @@ def backtest(
     train_log=None,
     add_seasonal=True,
 ):
+    for name, value in [('horizon', horizon), ('n_folds', n_folds)]:
+        if isinstance(value, (bool, np.bool_)) or not isinstance(value, (int, np.integer)) or value < 1:
+            raise ValueError(f'{name} must be a positive integer.')
     from data_pipeline import (
         apply_trend,
         create_features,
@@ -1937,6 +1940,12 @@ def backtest(
     df = df.copy()
     df["date"] = pd.to_datetime(df["date"])
     target = _resolve_col(df, target)
+    if df['date'].isna().any() or df['date'].duplicated().any():
+        raise ValueError('Backtest dates must be valid and unique; aggregate duplicate periods first.')
+    df[target] = pd.to_numeric(df[target], errors='raise')
+    if not np.isfinite(df[target]).all():
+        raise ValueError('Backtest target values must be finite; clean missing observations first.')
+    df = df.sort_values('date', kind='stable').reset_index(drop=True)
     n = len(df)
     if n < horizon * (n_folds + 1):
         n_folds = max(1, n // (horizon * 2))
@@ -2046,6 +2055,9 @@ def backtest(
             continue
         mae = float(mean_absolute_error(merged[target], merged["forecast"]))
         rmse = float(np.sqrt(mean_squared_error(merged[target], merged["forecast"])))
+        naive = float(train_slice[target].iloc[-1])
+        naive_mae = float(np.mean(np.abs(merged[target] - naive)))
+        naive_rmse = float(np.sqrt(np.mean((merged[target] - naive) ** 2)))
         rows.append(
             {
                 "fold": fold,
@@ -2053,6 +2065,13 @@ def backtest(
                 "mae": mae,
                 "rmse": rmse,
                 "n_test": len(merged),
+                'naive_mae': naive_mae,
+                'naive_rmse': naive_rmse,
+                'mae_skill': 1 - mae / naive_mae if naive_mae > 0 else None,
+                'coverage': len(merged) / len(test_slice),
+                'train_end': train_slice['date'].iloc[-1].isoformat(),
+                'test_start': test_slice['date'].iloc[0].isoformat(),
+                'test_end': test_slice['date'].iloc[-1].isoformat(),
             }
         )
 

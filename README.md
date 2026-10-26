@@ -98,3 +98,9 @@ Product history cache writes use atomic replacement, preserving the previous fil
 
 See the [engineering audit](docs/ENGINEERING_AUDIT.md) for the dated test baseline,
 project assessment, environment assignment and remaining work.
+
+## Additional workflow improvements
+
+Backtest date/size/target guards, a last-training-price baseline, MAE skill, scored-window coverage and chronological split provenance, exposed in the chart and fold table.
+
+Backtest → Run Backtest. Compare the baseline trace and inspect Naive MAE, MAE Skill, Coverage and split dates.
