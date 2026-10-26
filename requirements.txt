@@ -1,12 +1,13 @@
-# Validated on Python 3.13.5 in a clean virtual environment.
-numpy==2.1.3
-pandas==2.2.3
+# Offline regression baseline: existing cnn environment, Python 3.10.20.
+# Live market fetching and optional training backends need separate validation.
+numpy==1.26.4
+pandas==2.3.3
 scipy==1.15.3
-scikit-learn==1.6.1
-joblib==1.4.2
-gradio==6.30.0
-plotly==7.1.0
+scikit-learn==1.7.2
+joblib==1.5.3
+gradio==6.15.2
+plotly==6.6.0
 requests==2.34.2
 beautifulsoup4==4.15.0
-jdatetime==6.1.1
+jdatetime==5.2.0
 openpyxl==3.1.5

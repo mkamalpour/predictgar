@@ -11,25 +11,27 @@ Open **Data & Charts** and upload a CSV with `date` and `price` columns. Train a
 <details>
 <summary>Using the existing managed Windows workspace</summary>
 
-Assigned environment: **cnn** — Python **3.10.20**, using the existing Conda environment `bean_classifier`. Open `Workspaces/predictgar.code-workspace` from the workspace folder to select its interpreter.
-
-From this repository folder in PowerShell:
+Assigned environment: **cnn**. From this repository folder in PowerShell:
 
 ```powershell
-& '..\Launchers\predictgar.cmd' --check --deep
-& '..\Launchers\predictgar.cmd'
+.\run.cmd --check
+.\run.cmd
 ```
 
-The launcher activates the assigned environment and checks dependencies. It does not install packages or download models. These launchers belong to the managed parent workspace; for a standalone clone, follow the setup instructions below in your own compatible environment. Keep optional model/provider prerequisites separate from the offline examples.
+The repo-local launcher selects `G:\AnaConda\install/envs/cnn`
+and imports required startup modules. It installs nothing and downloads
+no models. On a standalone clone where that interpreter is absent, it uses your
+active `python`; activate a compatible environment first. `--check` reports the
+actual interpreter; it does not validate optional models or every workflow.
 
 </details>
 
 ## Run locally
 
-The managed workspace is verified with **Python 3.10.20 / Gradio 6.15.2** in the existing `bean_classifier` environment (`cnn` alias). The application retains Gradio 5/6 compatibility routes; `requirements.txt` records the base dependency versions. BeautifulSoup is needed only for live HTML discovery, not CSV workflows or the offline product catalog.
+The managed workspace uses **Python 3.10.20 / Gradio 6.15.2** in the existing `cnn` environment. The application retains Gradio 5/6 compatibility routes; `requirements.txt` records the installed offline-test baseline. Do not reinstall a working environment just to run it. BeautifulSoup is needed only for live HTML discovery, not CSV workflows or the offline product catalog.
 
 ```powershell
-conda activate bean_classifier  # Or use your existing compatible environment.
+conda activate cnn  # Or use your existing compatible environment.
 # Install dependencies if they are not already available in your environment.
 python -m pip install -r requirements.txt
 python app.py
@@ -93,3 +95,6 @@ Browser verification covered CSV import, all six tabs, table switching with reta
 No license file is included.
 
 Product history cache writes use atomic replacement, preserving the previous file on write failure. Forced external refreshes retain their cached fallback when the source is unavailable.
+
+See the [engineering audit](docs/ENGINEERING_AUDIT.md) for the dated test baseline,
+project assessment, environment assignment and remaining work.

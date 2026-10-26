@@ -59,7 +59,7 @@ except (ImportError, ModuleNotFoundError) as exc:
     print(
         "\nPredictGar could not start because a required dependency is missing.\n"
         "\nUse the assigned CNN environment and install the project dependencies first:\n"
-        "  conda activate bean_classifier\n"
+        "  conda activate cnn\n"
         "  python -m pip install -r requirements.txt\n"
         "\nIf you are using the managed workspace, open the project workspace to select the right interpreter.\n"
         f"Original error: {type(exc).__name__}: {exc}\n"
