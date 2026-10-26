@@ -870,7 +870,7 @@ def iterative_forecast(
         X_step = temp_feat[feature_cols].iloc[-1:].values
         pred = float(model.predict(scaler.transform(X_step))[0])
         if not np.isfinite(pred):
-            pred = 0.0
+            raise ValueError("Model returned a non-finite forecast. Retrain or check the input features.")
         preds.append({"date": fdate, "forecast_detrended": pred})
         # Append to history for next step
         hist_row = {

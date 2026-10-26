@@ -311,3 +311,19 @@ def test_readable_table_bounds_large_results_and_explains_full_data_access():
     assert result.count("<td>") == 200
     assert "interactive table" in result and "CSV export" in result
     assert "<table" not in app._table_html(pd.DataFrame(), "Empty results")
+
+
+@pytest.mark.parametrize("value", [np.nan, np.inf, -np.inf])
+def test_recursive_forecast_rejects_invalid_model_output_instead_of_inventing_prices(value):
+    class InvalidModel:
+        def predict(self, X):
+            return [value]
+    class IdentityScaler:
+        def transform(self, X):
+            return X
+    frame = series(30)
+    columns = ['detrended_lag_1']
+    with pytest.raises(ValueError, match='non-finite forecast'):
+        models.iterative_forecast(frame, 'price', 'detrended', columns,
+                                  InvalidModel(), IdentityScaler(), 1., 3,
+                                  [1], [2], 'D', None, None, -1., 1.)
