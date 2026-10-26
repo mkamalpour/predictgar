@@ -8,12 +8,28 @@ Explore Iranian livestock and feed price history, compare forecasting models, an
 
 Open **Data & Charts** and upload a CSV with `date` and `price` columns. Train a small model in **Training**, inspect **Backtest**, then export from **Forecast**. The built-in product catalog contains names, not example price observations.
 
-## Run locally
+<details>
+<summary>Using the existing managed Windows workspace</summary>
 
-Verified existing environments: Python 3.13.5 / Gradio 5.49.1 and Python 3.10.19 / Gradio 6.14.0. Use a compatible existing environment; `requirements.txt` records the base dependency versions. BeautifulSoup is needed only for live HTML discovery, not CSV workflows or the offline product catalog.
+Assigned environment: **cnn** — Python **3.10.20**, using the existing Conda environment `bean_classifier`. Open `Workspaces/predictgar.code-workspace` from the workspace folder to select its interpreter.
+
+From this repository folder in PowerShell:
 
 ```powershell
-conda activate base  # Or use your existing compatible environment.
+& '..\Launchers\predictgar.cmd' --check --deep
+& '..\Launchers\predictgar.cmd'
+```
+
+The launcher activates the assigned environment and checks dependencies. It does not install packages or download models. These launchers belong to the managed parent workspace; for a standalone clone, follow the setup instructions below in your own compatible environment. Keep optional model/provider prerequisites separate from the offline examples.
+
+</details>
+
+## Run locally
+
+The managed workspace is verified with **Python 3.10.20 / Gradio 6.15.2** in the existing `bean_classifier` environment (`cnn` alias). The application retains Gradio 5/6 compatibility routes; `requirements.txt` records the base dependency versions. BeautifulSoup is needed only for live HTML discovery, not CSV workflows or the offline product catalog.
+
+```powershell
+conda activate bean_classifier  # Or use your existing compatible environment.
 # Install dependencies if they are not already available in your environment.
 python -m pip install -r requirements.txt
 python app.py

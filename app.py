@@ -126,6 +126,7 @@ textarea, input { unicode-bidi: plaintext; }
 .gradio-container .plot-container { min-height: 220px; }
 .gradio-container .chatbot.md p, .gradio-container footer a, .gradio-container footer button { color: #475e66 !important; }
 .gradio-container .tabitem { padding-top: 18px; }
+.gradio-container .prose h2 { font-size: var(--text-lg, 1.125rem); }
 .plain-table-scroll { max-height: 360px; overflow: auto; background: #fff; color: #173340; border: 1px solid #cbd5d7; border-radius: 6px; }
 .plain-table-scroll:focus-visible { outline: 3px solid #16817b; outline-offset: 3px; }
 .plain-results { width: 100%; border-collapse: collapse; font-size: 13px; }
@@ -312,7 +313,7 @@ def create_app():
 
         # TAB 1: QUICK PREDICT
         with gr.Tab("Quick Predict"):
-            gr.Markdown("###  Forecast a product")
+            gr.Markdown("##  Forecast a product")
 
             with gr.Row():
                 with gr.Column(scale=1):
@@ -1046,7 +1047,7 @@ def create_app():
 
         # TAB 3: TRAINING — FULLY FIXED
         with gr.Tab("Training"):
-            gr.Markdown("###  Compare models on your dataset")
+            gr.Markdown("##  Compare models on your dataset")
 
             with gr.Row():
                 with gr.Column():
@@ -1740,7 +1741,7 @@ def create_app():
 
         # TAB 4: FORECAST
         with gr.Tab("Forecast"):
-            gr.Markdown("###  Forecast with a trained model")
+            gr.Markdown("##  Forecast with a trained model")
 
             with gr.Row():
                 with gr.Column():
@@ -2203,7 +2204,7 @@ def create_app():
 
         # TAB 5: BACKTEST
         with gr.Tab("Backtest"):
-            gr.Markdown("###  Historical Accuracy Test — Validate Before Trusting")
+            gr.Markdown("##  Historical Accuracy Test — Validate Before Trusting")
 
             with gr.Row():
                 bt_models = gr.Dropdown(
@@ -2485,7 +2486,7 @@ def create_app():
 
         # TAB 6: ANALYZE
         with gr.Tab("Analyze"):
-            gr.Markdown("###  Explore price relationships")
+            gr.Markdown("##  Explore price relationships")
 
             with gr.Accordion("Controls", open=True):
                 with gr.Row():
