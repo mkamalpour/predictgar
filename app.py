@@ -1,59 +1,70 @@
 """PredictGar: local commodity forecasting interface and workspace callbacks."""
 
-import os, re, unicodedata
-import inspect
-from html import escape
-from datetime import datetime
-import numpy as np
-import pandas as pd
-import gradio as gr
-import plotly.graph_objects as go
-import plotly.express as px
+try:
+    import os, re, unicodedata
+    import inspect
+    from html import escape
+    from datetime import datetime
+    import numpy as np
+    import pandas as pd
+    import gradio as gr
+    import plotly.graph_objects as go
+    import plotly.express as px
 
-# Data Pipeline imports
-from data_pipeline import (
-    Fetcher,
-    Cache,
-    preprocess,
-    create_features,
-    detrend_series,
-    apply_trend,
-    merge_external_features,
-    fetch_related_prices,
-    get_product_profile,
-    check_data_quality,
-    auto_params,
-    select_features,
-    CACHE_DIR,
-    MODELS_DIR,
-    FORECASTS_DIR,
-    EXTERNAL_FEATURE_REGISTRY,
-)
+    # Data Pipeline imports
+    from data_pipeline import (
+        Fetcher,
+        Cache,
+        preprocess,
+        create_features,
+        detrend_series,
+        apply_trend,
+        merge_external_features,
+        fetch_related_prices,
+        get_product_profile,
+        check_data_quality,
+        auto_params,
+        select_features,
+        CACHE_DIR,
+        MODELS_DIR,
+        FORECASTS_DIR,
+        EXTERNAL_FEATURE_REGISTRY,
+    )
 
-# Model Pipeline imports
-from model_pipeline import (
-    train_all,
-    compute_original_scale_metrics,
-    iterative_forecast,
-    create_forecast_plot,
-    save_trained_models,
-    load_trained_model,
-    list_saved_models,
-    backtest,
-    quick_predict,
-    quick_predict_hybrid,
-    detect_anomalies,
-    format_anomaly_report,
-    feature_importance_by_horizon,
-    compute_split_date,
-    XGB_AVAILABLE,
-    LGBM_AVAILABLE,
-    DEFAULT_MODELS,
-    SmartHybridPredictor,
-    analyze_product_relationships,
-    EXTERNAL_LABELS,
-    smart_feature_selection,
-)
+    # Model Pipeline imports
+    from model_pipeline import (
+        train_all,
+        compute_original_scale_metrics,
+        iterative_forecast,
+        create_forecast_plot,
+        save_trained_models,
+        load_trained_model,
+        list_saved_models,
+        backtest,
+        quick_predict,
+        quick_predict_hybrid,
+        detect_anomalies,
+        format_anomaly_report,
+        feature_importance_by_horizon,
+        compute_split_date,
+        XGB_AVAILABLE,
+        LGBM_AVAILABLE,
+        DEFAULT_MODELS,
+        SmartHybridPredictor,
+        analyze_product_relationships,
+        EXTERNAL_LABELS,
+        smart_feature_selection,
+    )
+except (ImportError, ModuleNotFoundError) as exc:
+    print(
+        "\nPredictGar could not start because a required dependency is missing.\n"
+        "\nUse the assigned CNN environment and install the project dependencies first:\n"
+        "  conda activate bean_classifier\n"
+        "  python -m pip install -r requirements.txt\n"
+        "\nIf you are using the managed workspace, open the project workspace to select the right interpreter.\n"
+        f"Original error: {type(exc).__name__}: {exc}\n"
+    )
+    raise SystemExit(2)
 
 
 # LOGGING HELPERS
